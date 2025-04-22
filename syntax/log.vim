@@ -66,6 +66,18 @@ syn match logTimeZone   display     'Z\|[+-]\d\d:\d\d\|\a\{3}\>'  contained  ski
 syn keyword logDateMonth    Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec  nextgroup=logDateDay  skipwhite
 syn keyword logDateWeekDay  Mon Tue Wed Thu Fri Sat Sun
 
+" Logcat
+" ------------------------------
+" e.g. --------- beginning of system
+syn match logcatSectionHeader '^--------- .\+$' display
+" ADB logcat datetime format: 05-07 02:27:42.068
+syn match logcatDatetime display '^\d\{2}-\d\{2} \d\{2}:\d\{2}:\d\{2}\.\d\{3}' containedin=ALL
+" 05-07 02:27:42.068   606   606 I auditd  : message...
+syn match logcatLine '^\d\{2}-\d\{2} \d\{2}:\d\{2}:\d\{2}\.\d\{3}\s\+\d\+\s\+\d\+\s\+[VDIWEF]\s\+[[:alnum:].@_$/-]\+\s*:' contains=logcatDateTime,logcatPidTid,logcatLevel,logcatTag
+syn match logcatPidTid '\s\+\d\+\s\+\d\+' contained
+syn match logcatLevel '\s\+[VDIWEF]\s\+' contained contains=@logLvs
+syn match logcatTag '\s\+[[:alnum:].@_$/-]\+\s*:' contained
+
 " System info
 " ------------------------------
 " Match letters & digits, dots, underscores and hyphens in system columns.
@@ -148,6 +160,12 @@ hi def link logDateWeekDay      Type
 hi def link logTime             Operator
 hi def link logTimeAMPM         Operator
 hi def link logTimeZone         Operator
+
+hi def link logcatSectionHeader Statement 
+hi def link logcatLine          Statement
+hi def link logcatDatetime      Special
+hi def link logcatPidTid        Number
+hi def link logcatTag           Special 
 
 hi def link logSysColumns       Statement
 hi def link logSysProcess       Function
